@@ -9,7 +9,7 @@ import sys
 
 signal.signal(signal.SIGPIPE, signal.SIG_DFL)
 
-USAGE = "usage: demo-cli.py [-t DATABASE] [-n LIMIT] REPO_NAME -- [FIlE_PATH]"
+USAGE = "usage: demo-cli.py [-t DATABASE] [-n LIMIT] REPO_NAME -- [FILE_PATH]"
 
 
 def print_usage(file=sys.stdout):
@@ -47,7 +47,7 @@ def parse_args(argv):
 
     parser = SilentArgumentParser(
         prog="demo-cli.py",
-        description="Query commit history from a bushi-index database.",
+        description="Query commit history from a view-index database.",
         add_help=False,
     )
     parser.add_argument(
@@ -285,7 +285,7 @@ def main(argv=None):
     else:
         query_path = None
 
-    database = args.database or os.environ.get("BUSHI_DATABASE")
+    database = args.database or os.environ.get("VIEW_DATABASE")
     if not database:
         fail("database path required")
 

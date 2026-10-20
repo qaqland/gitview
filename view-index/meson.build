@@ -1,5 +1,5 @@
 project(
-    'bushi-index',
+    'view-index',
     'c',
     meson_version: '>= 1.3.0',
     version: '0.2',
@@ -45,8 +45,8 @@ libgit = declare_dependency(
 deps = [dependency('sqlite3'), dependency('zlib'), libgit]
 
 exe = executable(
-    'bushi-index',
-    'bushi-index.c',
+    'view-index',
+    'view-index.c',
     dependencies: deps,
     install: true,
 )

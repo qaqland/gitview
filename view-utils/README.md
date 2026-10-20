@@ -3,9 +3,9 @@
 ## Prepare
 
 ```
-$ ./history/make-repo
-$ bushi-index -t test.db -a history/test-repo/
-$ bushi-index -t test.db test-repo
+$ ./history/make-repo.sh
+$ view-index -t test.db -a history/test-repo/
+$ view-index -t test.db test-repo
 ```
 
 ## Check

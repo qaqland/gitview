@@ -431,7 +431,7 @@ print_usage(FILE *stream, const char *prog)
 	    "Index git repository metadata into an SQLite database.\n"
 	    "\n"
 	    "\t-a PATH       Register a repository (no NAME; does not sync)\n"
-	    "\t-t DATABASE   SQLite database path (or BUSHI_DATABASE)\n"
+	    "\t-t DATABASE   SQLite database path (or VIEW_DATABASE)\n"
 	    "\t-c            Check repository consistency (not implemented)\n"
 	    "\t-f            Fix missing objects (not implemented)\n"
 	    "\t-s            Show repository status\n"
@@ -513,7 +513,7 @@ determine_repository_head(void)
 	    NULL,
 	};
 
-	head = value_from_config("bushi.head");
+	head = value_from_config("view.head");
 	if (head && *head && branch_exists(refs, head)) {
 		dbg("repository head from config: %s", head);
 		goto out;
@@ -546,7 +546,7 @@ determine_repository_name(const char *path)
 {
 	char *name = NULL;
 
-	name = value_from_config("bushi.name");
+	name = value_from_config("view.name");
 	if (name && *name) {
 		dbg("repository name from config: %s", name);
 		return name;
@@ -1425,7 +1425,7 @@ main(int argc, char *const argv[])
 	}
 
 	if (database == NULL) {
-		database = getenv("BUSHI_DATABASE");
+		database = getenv("VIEW_DATABASE");
 	}
 	if (database == NULL)
 		err("database path not specified");
