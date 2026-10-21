@@ -1,0 +1,11 @@
+<h1 class="sr-only">projects</h1>
+{% if rows.is_empty() %}<p class="muted">No repositories have been indexed yet.</p>{% else %}
+<div class="scroll-x"><table class="list">
+  <thead><tr><th scope="col">Name</th><th scope="col">Description</th><th scope="col">Updated (UTC)</th></tr></thead>
+  <tbody>
+  {% for row in rows %}
+    <tr><td><a href="{{ row.href }}">{{ row.name }}</a></td><td>{{ row.description }}</td><td class="hash muted">{{ row.updated }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+{% endif %}

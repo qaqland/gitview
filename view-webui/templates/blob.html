@@ -1,0 +1,21 @@
+<p class="meta">{% if lines.is_some() %}{{ loc }} lines · {% else %}Binary file · {% endif %}{{ size }}</p>
+{% if preview_unavailable %}<p class="muted">Preview unavailable (binary, non-UTF-8, or larger than 256 KiB).</p>{% endif %}
+<div class="blob-content{% if preview_html.is_some() %} has-preview{% endif %}">
+{% if let Some(html) = preview_html %}
+<div class="preview-view">
+<div class="readme">{{ html|safe }}</div>
+</div>
+{% endif %}
+<div class="source-view">
+{% if let Some(lines) = lines %}
+<div class="scroll-x" tabindex="0" role="region" aria-label="Source code"><table class="code"><tbody>
+{% for line in lines %}
+<tr id="L{{ loop.index }}"><td class="ln"><a href="{{ permalink }}#L{{ loop.index }}" aria-label="Permanent link to line {{ loop.index }}">{{ loop.index }}</a></td><td>{{ line|safe }}</td></tr>
+{% endfor %}
+</tbody></table></div>
+{% if lines.is_empty() %}<p class="muted">This file is empty.</p>{% endif %}
+{% else %}
+<p class="muted">Binary content cannot be displayed as text. <a href="{{ download_href }}">Download file</a></p>
+{% endif %}
+</div>
+</div>

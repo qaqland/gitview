@@ -1,0 +1,17 @@
+<h1 class="sr-only">{{ title }}</h1>
+{% if entries.is_empty() %}
+<p class="muted">No matching commits at this version and path{% if !latest_href.is_empty() %} after this cursor{% endif %}.</p>
+{% else %}
+<div class="scroll-x"><table class="list history-list">
+  <thead><tr><th scope="col">Commit</th><th scope="col">Subject</th><th scope="col">Author</th><th scope="col">Time (UTC)</th></tr></thead>
+  <tbody>
+  {% for entry in entries %}
+    <tr><td class="hash"><a href="{{ entry.href }}">{{ entry.short }}</a></td><td><a href="{{ entry.href }}">{{ entry.subject }}</a></td><td>{{ entry.author }}</td><td class="hash muted">{{ entry.time }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+{% endif %}
+<nav class="actions pages" aria-label="History pages">
+  {% if !latest_href.is_empty() %}<a href="{{ latest_href }}">Latest commits</a>{% endif %}
+  {% if let Some(older_href) = older_href %}<a href="{{ older_href }}">Older commits</a>{% endif %}
+</nav>

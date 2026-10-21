@@ -1,0 +1,32 @@
+<section>
+  <h1>{{ commit.subject }}</h1>
+  <p class="meta"><span class="hash">{{ commit.short_hash }}</span> · {{ commit.author }} &lt;{{ commit.author_email }}&gt; · {{ commit.authored_at }}</p>
+  {% if !message.is_empty() %}<pre class="commit-message">{{ message }}</pre>{% endif %}
+  <dl class="meta-grid">
+    <dt>Commit</dt><dd class="mono">{{ commit.hash }}</dd>
+    <dt>Parents</dt><dd>{% for parent in parents %}{% if !loop.first %} · {% endif %}<a class="hash" href="{{ parent.href }}">{{ parent.short }}</a>{% endfor %}{% if parents.is_empty() %}None (initial commit){% endif %}</dd>
+  </dl>
+  {% if parents.len() > 1 %}<p class="muted">Merge commit. Changes below are compared with the first parent: {% for parent in parents %}{% if loop.first %}<a href="{{ parent.href }}">{{ parent.short }}</a>{% endif %}{% endfor %}.</p>{% endif %}
+</section>
+<section aria-labelledby="changes-title">
+  <h2 id="changes-title">Changes</h2>
+  <p>{{ files_changed }} files changed · <span class="diff-add">+{{ insertions }}</span> <span class="diff-del">−{{ deletions }}</span></p>
+  {% if files.is_empty() %}<p class="muted">No file changes.</p>{% else %}
+  <div class="scroll-x"><table class="list changes-list">
+    <thead><tr><th scope="col">File</th><th scope="col">Status</th><th scope="col">Add</th><th scope="col">Del</th><th scope="col">Content</th></tr></thead>
+    <tbody>
+    {% for file in files %}
+      <tr><td class="mono"><a href="#{{ file.anchor }}">{% if let Some(old_path) = file.old_path %}{{ old_path }} → {% endif %}{{ file.path }}</a></td><td>{{ file.status }}</td><td class="diff-add">+{{ file.additions }}</td><td class="diff-del">−{{ file.deletions }}</td><td>{% if file.blob_href.is_empty() %}<span class="muted">{{ file.view_label }}</span>{% else %}<a href="{{ file.blob_href }}">{{ file.view_label }}</a>{% endif %}</td></tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+  {% endif %}
+</section>
+{% if truncated %}<p class="notice">Only the first 600 diff lines are shown. <a href="{{ patch_href }}">Download the complete patch</a>.</p>{% endif %}
+{% for file in files %}
+<section id="{{ file.anchor }}" class="diff-section" aria-label="Diff for {{ file.path }}">
+  <div class="file-heading"><h2>{{ file.path }}</h2>{% if !file.blob_href.is_empty() %}<a href="{{ file.blob_href }}">{{ file.view_label }}</a>{% endif %}</div>
+  {% if !file.diff.is_empty() %}<div class="diff" tabindex="0" role="region" aria-label="Diff">{% for line in file.diff %}<div class="diff-line{% if !line.class.is_empty() %} {{ line.class }}{% endif %}">{{ line.text }}</div>{% endfor %}</div>{% endif %}
+  {% if file.truncated %}<p class="muted">This diff is incomplete. <a href="{{ patch_href }}">Download the complete patch</a>.</p>{% else if file.diff.is_empty() %}<p class="muted">No text diff is available for this file.</p>{% endif %}
+</section>
+{% endfor %}
