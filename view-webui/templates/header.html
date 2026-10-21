@@ -1,0 +1,26 @@
+<header class="site">
+  <div class="site-bar">
+    <span class="site-location"><a href="/">projects</a>{% if let Some(header) = header %}<span class="sep">/</span><a href="{{ header.home_href }}">{{ header.name }}</a>{% if let Some(status) = header.status %}<span class="sep">·</span><span class="object-type">{{ status.kind }}</span>{% endif %}{% endif %}</span>
+    {% if let Some(header) = header %}{% if let Some(status) = header.status %}
+    <span class="status-ref">{{ status.value }}{% if let Some(refs_href) = status.refs_href %} · <a href="{{ refs_href }}">refs</a>{% endif %}</span>
+    {% endif %}{% endif %}
+  </div>
+  {% if let Some(header) = header %}
+  {% if let Some(path) = header.path %}
+  <div class="path-head">
+    {% if !path.description.is_empty() %}
+    <div class="repo-description">{{ path.description }}</div>
+    {% endif %}
+    {% if !path.crumbs.is_empty() %}
+    <nav class="crumbs" aria-label="Path"><ol>
+      {% for crumb in path.crumbs %}{% if crumb.mid %}<li class="crumb-mid">{% else %}<li>{% endif %}{% if crumb.current %}<span class="current" aria-current="location">{{ crumb.label }}</span>{% else %}<a href="{{ crumb.href }}">{{ crumb.label }}</a>{% endif %}</li>{% endfor %}
+      {% if path.ellipsis %}<li class="crumb-ellipsis" aria-hidden="true">…</li>{% endif %}
+    </ol></nav>
+    {% endif %}
+    {% if !path.actions.is_empty() || path.root_repo_href.is_some() %}
+    <nav class="actions" aria-label="Actions">{% for action in path.actions %}<span class="action-item{% if action.label == path.current_action %} action-current{% endif %}" data-view="{{ action.label }}"><a href="{{ action.href }}">{{ action.label }}</a><span aria-current="page">{{ action.label }}</span></span>{% if !loop.last %}<span class="dot">·</span>{% endif %}{% endfor %}{% if let Some(repo_href) = path.root_repo_href %}{% if !path.actions.is_empty() %}<span class="dot">·</span>{% endif %}<a href="{{ repo_href }}/-/tags">Tags</a><span class="dot">·</span><a href="{{ repo_href }}/-/branches">Branches</a>{% endif %}</nav>
+    {% endif %}
+  </div>
+  {% endif %}
+  {% endif %}
+</header>

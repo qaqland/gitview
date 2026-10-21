@@ -1,0 +1,28 @@
+<h1>{{ title }}</h1>
+{% if switching %}<p class="meta">{{ context }}</p>{% endif %}
+{% if show_branches %}
+{% if show_tags %}<h2>Branches</h2>{% endif %}
+{% if branches.is_empty() %}<p class="muted">No branches.</p>{% else %}
+<div class="scroll-x"><table class="list refs-list">
+  <thead><tr><th scope="col">Name</th><th scope="col">Commit</th><th scope="col">Time (UTC)</th></tr></thead>
+  <tbody>
+  {% for row in branches %}
+    <tr><td><a class="mono" href="{{ row.href }}">{{ row.name }}</a>{% if row.default %} <span class="mark">default</span>{% endif %}</td><td class="hash"><a href="{{ row.commit_href }}">{{ row.short }}</a></td><td class="hash muted">{{ row.time }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+{% endif %}
+{% endif %}
+{% if show_tags %}
+{% if show_branches %}<h2>Tags</h2>{% endif %}
+{% if tags.is_empty() %}<p class="muted">No tags.</p>{% else %}
+<div class="scroll-x"><table class="list refs-list">
+  <thead><tr><th scope="col">Name</th><th scope="col">Commit</th><th scope="col">Time (UTC)</th></tr></thead>
+  <tbody>
+  {% for row in tags %}
+    <tr><td><a class="mono" href="{{ row.href }}">{{ row.name }}</a>{% if row.default %} <span class="mark">default</span>{% endif %}</td><td class="hash"><a href="{{ row.commit_href }}">{{ row.short }}</a></td><td class="hash muted">{{ row.time }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+{% endif %}
+{% endif %}
