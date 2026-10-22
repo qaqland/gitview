@@ -1,8 +1,11 @@
 -- It's use to initialize the SQLite database. We don't have migration for now.
 -- Regenerating the database won't cause any data loss.
 
--- https://sqlite.org/pragma.html#pragma_synchronous
-PRAGMA synchronous = OFF;
+-- https://sqlite.org/pragma.html
+PRAGMA journal_mode = OFF;
+PRAGMA synchronous  = OFF;
+PRAGMA cache_size   = -131072; -- 128 MiB, matches the ~1.4M row changes table
+PRAGMA temp_store   = MEMORY;  -- COUNT(DISTINCT)/DISTINCT in the backfill queries
 
 CREATE TABLE IF NOT EXISTS repositories
 (      repository_id    INTEGER PRIMARY KEY AUTOINCREMENT
