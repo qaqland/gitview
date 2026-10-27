@@ -1,0 +1,17 @@
+[package]
+name = "view-query"
+version = "0.0.1"
+edition = "2024"
+publish = false
+
+[dependencies]
+getopts = "0.2"
+rusqlite = "0.33"
+thiserror = "2"
+
+# [dev-dependencies]
+# criterion = "0.5"
+
+# [[bench]]
+# name = "query"
+# harness = false
