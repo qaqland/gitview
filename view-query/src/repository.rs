@@ -173,10 +173,11 @@ pub(crate) fn commit_by_prefix(
               , commit_hash
            FROM commits
           WHERE repository_id = ?1
-            AND commit_hash LIKE ?2
+            AND commit_hash GLOB ?2
           LIMIT 2;",
     )?;
-    let mut rows = stmt.query(params![repo_id, format!("{prefix}%")])?;
+    // GLOB uses the BINARY hash index; Git stores hashes in lowercase.
+    let mut rows = stmt.query(params![repo_id, format!("{}*", prefix.to_ascii_lowercase())])?;
     let row = rows.next()?.ok_or(QueryError::RevNotFound)?;
     let commit = (row.get(0)?, row.get(1)?);
     if rows.next()?.is_some() {
